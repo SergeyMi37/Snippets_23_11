@@ -43,6 +43,15 @@ def snippets_page(request):
     return render(request, 'pages/view_snippets.html', context)
 
 
+def snippets_my(request):
+    snippets = Snippet.objects.filter(user=request.user)
+    context = {
+        'pagename': 'Мои сниппеты',
+        'snippets': snippets
+    }
+    return render(request, 'pages/view_snippets.html', context)
+
+
 def snippet_detail(request, snippet_id):
     snippet = Snippet.objects.get(id=snippet_id)
     comment_form = CommentForm()
