@@ -62,6 +62,12 @@ def snippet_detail(request, snippet_id):
     return render(request, 'pages/snippet_detail.html', context)
 
 
+def snippet_delete(request, snippet_id):
+    snippet = Snippet.objects.get(id=snippet_id)
+    snippet.delete()
+    return redirect("snippets-list")
+
+
 def login_page(request):
     if request.method == 'POST':
         username = request.POST.get("username")
