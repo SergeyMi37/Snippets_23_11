@@ -35,18 +35,15 @@ def add_snippet_page(request):
 
 
 def snippets_page(request):
+    # Извлекаем query-параметр:
+    filter = request.GET.get('filter')
     snippets = Snippet.objects.all()
+    pagename = 'Просмотр сниппетов'
+    if filter:
+        snippets = snippets.filter(user=request.user)
+        pagename = 'Мои сниппеты'
     context = {
-        'pagename': 'Просмотр сниппетов',
-        'snippets': snippets
-    }
-    return render(request, 'pages/view_snippets.html', context)
-
-
-def snippets_my(request):
-    snippets = Snippet.objects.filter(user=request.user)
-    context = {
-        'pagename': 'Мои сниппеты',
+        'pagename': pagename,
         'snippets': snippets
     }
     return render(request, 'pages/view_snippets.html', context)
