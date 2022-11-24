@@ -42,9 +42,14 @@ def snippets_page(request):
     if filter:
         snippets = snippets.filter(user=request.user)
         pagename = 'Мои сниппеты'
+    lang = request.GET.get("lang")
+    # print(f"{lang=}")
+    if lang is not None:
+        snippets = snippets.filter(lang=lang)
     context = {
         'pagename': pagename,
-        'snippets': snippets
+        'snippets': snippets,
+        'lang': lang
     }
     return render(request, 'pages/view_snippets.html', context)
 
