@@ -18,10 +18,20 @@
         <div class="row">
             <div class="col">
                 <form method="GET">
-                    <select name="lang" id="id_lang">
+                    <select name="lang">
                         <option value="py" {% if lang == "py" %}selected{% endif %}>python</option>
                         <option value="js" {% if lang == "js" %}selected{% endif %}>javascript</option>
                         <option value="cpp" {% if lang == "cpp" %}selected{% endif %}>C++</option>
+                    </select>
+                    <button type="submit">Применить</button>
+                </form>
+            </div>
+            <div class="col">
+                <form method="GET">
+                    <select name="username">
+                    {% for user in users %}
+                        <option value="{{ user.username }}">{{ user.username }}</option>
+                    {% endfor %}
                     </select>
                     <button type="submit">Применить</button>
                 </form>

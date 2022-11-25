@@ -2,9 +2,9 @@
 {% block style %}
     {{ block.super }}
     <style>
-    td, tr {
-         border: 1px solid black;
-    }
+        td, tr {
+            border: 1px solid black;
+        }
     </style>
 {% endblock %}
 {% block content %}
@@ -42,7 +42,7 @@
                         <th>Комментарии</th>
                     </tr>
                     </thead>
-                    <tbody >
+                    <tbody>
                     {% for comment in comments.all %}
                         <tr>
                             <td>{{ comment.author }}</td>

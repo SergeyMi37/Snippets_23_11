@@ -5,6 +5,8 @@ from MainApp.forms import SnippetForm, UserRegistrationForm, CommentForm
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
+from django.contrib.auth.models import User
+from django.db.models import Count
 
 
 def index_page(request):
@@ -21,13 +23,6 @@ def add_snippet_page(request):
         }
         return render(request, 'pages/add_snippet.html', context)
     elif request.method == "POST":
-        # print("form data = ", list(request.POST.items()))
-        # snippet = Snippet(
-        #     name=request.POST["name"],
-        #     lang=request.POST["lang"],
-        #     code=request.POST["code"]
-        # )
-        # snippet.save()
         form = SnippetForm(request.POST)
         if form.is_valid():
             snippet = form.save(commit=False)
@@ -41,13 +36,20 @@ def snippets_page(request):
     filter = request.GET.get('filter')
     snippets = Snippet.objects.all()
     pagename = 'Просмотр сниппетов'
+    users = User.objects.all().annotate(num_snippets=Count('snippet')).filter(num_snippets__gte=1)
     if filter:
         snippets = snippets.filter(user=request.user)
         pagename = 'Мои сниппеты'
+
+    username = request.GET.get('username')
+    if username:
+        filter_user = User.objects.get(username=username)
+        snippets = snippets.filter(user=filter_user)
+
     lang = request.GET.get("lang")
-    # print(f"{lang=}")
     if lang is not None:
         snippets = snippets.filter(lang=lang)
+
     sort = request.GET.get("sort")
     if sort == 'name':
         snippets = snippets.order_by("name")
@@ -57,12 +59,13 @@ def snippets_page(request):
         sort = "name"
     if sort is None:
         sort = "init"
-    # print(f"{sort=}")
+
     context = {
         'pagename': pagename,
         'snippets': snippets,
         'lang': lang,
-        'sort': sort
+        'sort': sort,
+        'users': users
     }
     return render(request, 'pages/view_snippets.html', context)
 
@@ -74,7 +77,7 @@ def snippet_detail(request, snippet_id):
     context = {
         'snippet': snippet,
         'comment_form': comment_form,
-        'comments': comments
+        'comments': comments,
     }
     return render(request, 'pages/snippet_detail.html', context)
 
