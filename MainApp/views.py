@@ -70,9 +70,11 @@ def snippets_page(request):
 def snippet_detail(request, snippet_id):
     snippet = Snippet.objects.get(id=snippet_id)
     comment_form = CommentForm()
+    comments = snippet.comments
     context = {
         'snippet': snippet,
-        'comment_form': comment_form
+        'comment_form': comment_form,
+        'comments': comments
     }
     return render(request, 'pages/snippet_detail.html', context)
 

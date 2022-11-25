@@ -1,4 +1,12 @@
 {% extends 'base.html' %}
+{% block style %}
+    {{ block.super }}
+    <style>
+    td, tr {
+         border: 1px solid black;
+    }
+    </style>
+{% endblock %}
 {% block content %}
     <div class="container">
         <div class="row">
@@ -23,6 +31,26 @@
                         </div>
                     </div>
                 </fieldset>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Автор</th>
+                        <th>Комментарии</th>
+                    </tr>
+                    </thead>
+                    <tbody >
+                    {% for comment in comments.all %}
+                        <tr>
+                            <td>{{ comment.author }}</td>
+                            <td>{{ comment.text }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
             </div>
         </div>
         <div class="row">
